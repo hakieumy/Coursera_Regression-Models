@@ -1,0 +1,56 @@
+---
+title: "Coursera - Regression Models"
+author: "Ha Kieu My"
+date: "1 January 2016"
+output: html_document
+---
+
+In this report, the data set "mtcars" data is analyzed to determine the relationship between the transmission type and fuel efficiency (miles per gallon) of automobiles. In particlular, these 2 questions are of interest:
+
+  1) Is an automatic or manual transmission better for MPG?
+  2) What is the MPG difference between automatic and manual transmissions?
+
+The data set "mtcars" was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles.
+
+Description of variables:
+  mpg: Miles per gallon
+  cyl: Number of cylinders
+  disp: Displacement (cu.in.)
+  hp: Gross horsepower
+  drat: Rear axle ratio
+  wt: Weight (lb/1000)
+  qsec: Time to drive ¼ mile
+  vs: V or ordinary engine
+  am: Transmission (0 = automatic, 1 = manual)
+  gear: Number of forward gears
+  carb: Number of carburetors
+
+The qualitative variables such as number of cylinders and gears were converted to factors.
+
+```{r}
+data(mtcars)
+library(knitr)
+mtcars$cyl <- factor(mtcars$cyl)
+mtcars$vs <- factor(mtcars$vs)
+mtcars$am <- factor(mtcars$am, labels = c("Automatic", "Manual"))
+mtcars$gear <- factor(mtcars$gear)
+mtcars$carb <- factor(mtcars$carb)
+```
+
+A Two Sample t-test is conducted between the different transmission types. The null hypothesis is that transmission types don't have an effect on MPG.
+
+```{r}
+t_test <- t.test(mpg ~ am, data = mtcars)
+t_test
+```
+
+The null hypothesis is discarded for a p-value greater than 0.05. The p-value of 0.001374 and difference in means show that manual transmission has significantly more MPG than automatic.
+Manual transmission has about 6 MPG more than automatics.
+
+```{r}
+boxplot(mpg ~ am, data = mtcars,
+        xlab = "Transmission type", ylab = "Miles per gallon",
+        main = "MPG vs Transmission", col = c("salmon", "steelblue"), 
+        names = c("Automatic", "Manual"))
+```
+
